@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Scene
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 112}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 102
+  controlID: 25
   draggingID: 0
 --- !u!114 &5
 MonoBehaviour:
@@ -220,8 +220,8 @@ MonoBehaviour:
     y: 0
     width: 291
     height: 933
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 76}
+  m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -590,12 +590,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -11880
-      - m_Data: -11632
-      - m_Data: -11328
-      - m_Data: -1298
-      - m_Data: 47086
-      - m_Data: 47130
+      - m_Data: -1324
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -741,7 +736,7 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 47438
+    - m_Data: 47432
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -774,7 +769,7 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 47438
+    - m_Data: 47432
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1417,7 +1412,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.040792342, y: -0.017386967, z: 0.00071033166, w: -0.9990179}
     speed: 2
-    m_Value: {x: -0.040792268, y: -0.017386936, z: 0.0007103304, w: -0.9990161}
+    m_Value: {x: -0.040792342, y: -0.017386967, z: 0.00071033166, w: -0.99901795}
   m_Size:
     m_Target: 388.8325
     speed: 2
