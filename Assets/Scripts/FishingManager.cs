@@ -7,8 +7,11 @@ public class FishingManager : MonoBehaviour
     public float minWait = 3f;
     public float maxWait = 10f;
     public float biteWindow = 1.5f;
+    public FishData[] fishTypes;
+
     private PlayerInventory inventory;
     private HUDManager hud;
+    private FishData currentFish;
 
     private enum State { Idle, Casting, Biting }
     private State currentState = State.Idle;
@@ -31,24 +34,14 @@ public class FishingManager : MonoBehaviour
         else if (currentState == State.Casting)
         {
             timer -= Time.deltaTime;
-            if (timer <= 0f)
-                Bite();
-
-            if (Input.GetKeyDown(KeyCode.F))
-                CancelCast();
+            if (timer <= 0f) Bite();
+            if (Input.GetKeyDown(KeyCode.F)) CancelCast();
         }
         else if (currentState == State.Biting)
         {
             timer -= Time.deltaTime;
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Catch();
-                return;
-            }
-
-            if (timer <= 0f)
-                Missed();
+            if (Input.GetMouseButtonDown(0)) { Catch(); return; }
+            if (timer <= 0f) Missed();
         }
     }
 
@@ -61,35 +54,53 @@ public class FishingManager : MonoBehaviour
         bobber.transform.position = pos;
         bobber.SetActive(true);
         timer = Random.Range(minWait, maxWait);
-        hud.SetStatus("your message here")
+        hud.SetStatus("Waiting for a bite...");
     }
 
     void Bite()
     {
         currentState = State.Biting;
         timer = biteWindow;
-        hud.SetStatus("your message here")
+        currentFish = PickRandomFish();
+        hud.SetStatus("Something's biting! CLICK!");
     }
 
     void Catch()
     {
         currentState = State.Idle;
         bobber.SetActive(false);
-        hud.SetStatus("your message here")
-        inventory.AddFish(1)
+        inventory.AddFish(currentFish);
+        hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
     }
 
     void Missed()
     {
         currentState = State.Idle;
         bobber.SetActive(false);
-        hud.SetStatus("your message here");
+        hud.SetStatus("The fish got away... Press F to try again.");
     }
 
     void CancelCast()
     {
         currentState = State.Idle;
         bobber.SetActive(false);
-        hud.SetStatus("your message here");
+        hud.SetStatus("Press F to cast!");
+    }
+
+    FishData PickRandomFish()
+    {
+        float total = 0f;
+        foreach (FishData f in fishTypes) total += f.spawnChance;
+
+        float roll = Random.Range(0f, total);
+        float cumulative = 0f;
+
+        foreach (FishData f in fishTypes)
+        {
+            cumulative += f.spawnChance;
+            if (roll <= cumulative) return f;
+        }
+
+        return fishTypes[0];
     }
 }
