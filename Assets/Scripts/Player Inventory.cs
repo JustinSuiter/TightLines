@@ -17,6 +17,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void AddFish(FishData fish)
     {
+        Debug.Log("AddFish called with: " + (fish != null ? fish.fishName : "NULL"));
         // Check if we already have this type
         FishEntry existing = caughtFish.Find(e => e.fishData == fish);
 

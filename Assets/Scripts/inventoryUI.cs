@@ -79,6 +79,7 @@ public class InventoryUI : MonoBehaviour
     // ── REFRESH DISPLAYS ────────────────────────────
     void RefreshFishGrid()
     {
+        Debug.Log("Refreshing grid. Fish count: " + inventory.caughtFish.Count);
         // Clear existing slots
         foreach (Transform child in fishGridParent)
             Destroy(child.gameObject);
@@ -95,9 +96,9 @@ public class InventoryUI : MonoBehaviour
                 if (t.name == "QuantityText") t.text = "x" + entry.quantity;
             }
 
-            Image icon = slot.transform.Find("Icon").GetComponent<Image>();
-            if (entry.fishData.fishImage != null)
-                icon.sprite = entry.fishData.fishImage;
+            Transform iconTransform = slot.transform.Find("Icon");
+            if (iconTransform != null && entry.fishData.fishImage != null)
+                iconTransform.GetComponent<Image>().sprite = entry.fishData.fishImage;
         }
     }
 

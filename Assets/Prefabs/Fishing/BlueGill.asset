@@ -16,4 +16,4 @@ MonoBehaviour:
   goldValue: 5
   spawnChance: 0.6
   catchDifficulty: 0.2
-  fishImage: {fileID: 0}
+  fishImage: {fileID: 21300000, guid: 572571c44c097184a95a9f5544b5db63, type: 3}

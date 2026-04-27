@@ -69,6 +69,14 @@ public class FishingManager : MonoBehaviour
     {
         currentState = State.Idle;
         bobber.SetActive(false);
+
+        if (currentFish == null)
+        {
+            Debug.Log("ERROR: currentFish is null!");
+            hud.SetStatus("Press F to cast!");
+            return;
+        }
+
         inventory.AddFish(currentFish);
         hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
     }
