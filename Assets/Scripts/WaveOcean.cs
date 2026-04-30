@@ -9,13 +9,24 @@ public class WaveOcean : MonoBehaviour
     public float spacing = 4f;         // Distance between vertices (total size = gridSize * spacing)
 
     [Header("Wave Settings")]
-    public float waveHeight1 = 0.5f;
-    public float waveSpeed1 = 1f;
-    public float waveLength1 = 8f;
+    public float wave1Height = 0.5f;
+    public float wave1Speed = 1f;
+    public float wave1Length = 8f;
+    public Vector2 wave1Direction = new Vector2(1f, 0.3f);
 
-    public float waveHeight2 = 0.3f;
-    public float waveSpeed2 = 1.4f;
-    public float waveLength2 = 5f;
+    public float wave2Height = 0.3f;
+    public float wave2Speed = 1.4f;
+    public float wave2Length = 5f;
+    public Vector2 wave2Direction = new Vector2(-0.5f, 1f);
+
+    public float wave3Height = 0.15f;
+    public float wave3Speed = 1.8f;
+    public float wave3Length = 3f;
+    public Vector2 wave3Direction = new Vector2(0.7f, -0.7f);
+
+    [Header("Choppiness")]
+    public float noiseStrength = 0.1f;
+    public float noiseScale = 0.3f;
 
     private Mesh mesh;
     private Vector3[] baseVertices;    // Original flat positions
@@ -93,8 +104,24 @@ public class WaveOcean : MonoBehaviour
     // PUBLIC — the boat will call this to know how high to float
     public float GetWaveHeight(float x, float z, float time)
     {
-        float wave1 = Mathf.Sin((x / waveLength1) + time * waveSpeed1) * waveHeight1;
-        float wave2 = Mathf.Cos((z / waveLength2) + time * waveSpeed2) * waveHeight2;
-        return wave1 + wave2;
+        float total = 0f;
+
+        total += DirectionalWave(x, z, time, wave1Direction, wave1Height, wave1Speed, wave1Length);
+        total += DirectionalWave(x, z, time, wave2Direction, wave2Height, wave2Speed, wave2Length);
+        total += DirectionalWave(x, z, time, wave3Direction, wave3Height, wave3Speed, wave3Length);
+
+        // Add Perlin noise for randomness — breaks up the pattern
+        float noise = (Mathf.PerlinNoise((x + time) * noiseScale, (z + time) * noiseScale) - 0.5f) * 2f;
+        total += noise * noiseStrength;
+
+        return total;
     }
+
+    float DirectionalWave(float x, float z, float time, Vector2 direction, float height, float speed, float length)
+    {
+        Vector2 dir = direction.normalized;
+        float dot = x * dir.x + z * dir.y;
+        return Mathf.Sin((dot / length) + time * speed) * height;
+    }
+    
 }
