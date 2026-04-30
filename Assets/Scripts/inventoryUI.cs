@@ -18,7 +18,8 @@ public class InventoryUI : MonoBehaviour
     public GameObject fishSlotPrefab;
 
     [Header("Items Display")]
-    public GameObject hornIcon;         // Simple Image for the horn
+    public Transform itemsGridParent;
+    public GameObject itemSlotPrefab;
 
     private PlayerInventory inventory;
     private bool isOpen = false;
@@ -104,7 +105,19 @@ public class InventoryUI : MonoBehaviour
 
     void RefreshItems()
     {
-        if (hornIcon != null)
-            hornIcon.SetActive(inventory.hasHorn);
+        foreach (Transform child in itemsGridParent)
+            Destroy(child.gameObject);
+
+        foreach (PlayerInventory.ItemEntry entry in inventory.ownedItems)
+        {
+            GameObject slot = Instantiate(itemSlotPrefab, itemsGridParent);
+
+            TextMeshProUGUI nameText = slot.transform.Find("NameText")?.GetComponent<TextMeshProUGUI>();
+            if (nameText != null) nameText.text = entry.itemData.itemName;
+
+            Transform iconTransform = slot.transform.Find("Icon");
+            if (iconTransform != null && entry.itemData.itemImage != null)
+                iconTransform.GetComponent<Image>().sprite = entry.itemData.itemImage;
+        }
     }
 }

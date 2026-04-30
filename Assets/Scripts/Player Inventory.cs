@@ -10,30 +10,42 @@ public class PlayerInventory : MonoBehaviour
         public int quantity;
     }
 
+    [System.Serializable]
+    public class ItemEntry
+    {
+        public ItemData itemData;
+        public int quantity;
+    }
+
     public List<FishEntry> caughtFish = new List<FishEntry>();
+    public List<ItemEntry> ownedItems = new List<ItemEntry>();
+    public ItemData hornItemData;
     public int goldCount = 0;
     public bool hasHorn = false;
+    public bool hornCaught = false;
     public int fishNeededForHorn = 5;
 
     public void AddFish(FishData fish)
     {
-        Debug.Log("AddFish called with: " + (fish != null ? fish.fishName : "NULL"));
-        // Check if we already have this type
         FishEntry existing = caughtFish.Find(e => e.fishData == fish);
-
-        if (existing != null)
-        {
-            existing.quantity++;
-        }
-        else
-        {
-            caughtFish.Add(new FishEntry { fishData = fish, quantity = 1 });
-        }
+        if (existing != null) existing.quantity++;
+        else caughtFish.Add(new FishEntry { fishData = fish, quantity = 1 });
 
         Debug.Log("Caught a " + fish.fishName + "!");
+    }
 
-        if (!hasHorn && TotalFishCount() >= fishNeededForHorn)
-            UnlockHorn();
+    public bool ShouldCatchHorn()
+    {
+        // Returns true if total fish >= 5 and we haven't caught the horn yet
+        return !hornCaught && TotalFishCount() >= fishNeededForHorn;
+    }
+
+    public void CatchHorn()
+    {
+        hornCaught = true;
+        hasHorn = true;
+        AddItem(hornItemData);
+        Debug.Log("Mysterious Horn caught!");
     }
 
     public bool SpendFish(FishData fish, int amount)
@@ -50,8 +62,7 @@ public class PlayerInventory : MonoBehaviour
     public int TotalFishCount()
     {
         int total = 0;
-        foreach (FishEntry e in caughtFish)
-            total += e.quantity;
+        foreach (FishEntry e in caughtFish) total += e.quantity;
         return total;
     }
 
@@ -63,9 +74,10 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    void UnlockHorn()
+        public void AddItem(ItemData item)
     {
-        hasHorn = true;
-        Debug.Log("Horn unlocked!");
+        ItemEntry existing = ownedItems.Find(e => e.itemData == item);
+        if (existing != null) existing.quantity++;
+        else ownedItems.Add(new ItemEntry { itemData = item, quantity = 1 });
     }
 }

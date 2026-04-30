@@ -61,8 +61,18 @@ public class FishingManager : MonoBehaviour
     {
         currentState = State.Biting;
         timer = biteWindow;
-        currentFish = PickRandomFish();
-        hud.SetStatus("Something's biting! CLICK!");
+
+        // If player has caught 5 fish, the next catch is the horn!
+        if (inventory.ShouldCatchHorn())
+        {
+            currentFish = null; // Special signal that this is the horn
+            hud.SetStatus("Something HUGE is biting! CLICK!");
+        }
+        else
+        {
+            currentFish = PickRandomFish();
+            hud.SetStatus("Something's biting! CLICK!");
+        }
     }
 
     void Catch()
@@ -72,13 +82,15 @@ public class FishingManager : MonoBehaviour
 
         if (currentFish == null)
         {
-            Debug.Log("ERROR: currentFish is null!");
-            hud.SetStatus("Press F to cast!");
-            return;
+            // It's the horn!
+            inventory.CatchHorn();
+            hud.SetStatus("You caught a Mysterious Horn! Check your inventory.");
         }
-
-        inventory.AddFish(currentFish);
-        hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
+        else
+        {
+            inventory.AddFish(currentFish);
+            hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
+        }
     }
 
     void Missed()
