@@ -81,7 +81,7 @@ public class WhaleTrader : MonoBehaviour
             // Set info text
             TextMeshProUGUI infoText = slot.transform.Find("InfoText")?.GetComponent<TextMeshProUGUI>();
             if (infoText != null)
-                infoText.text = entry.fishData.fishName + " x" + entry.quantity + " — " + entry.fishData.goldValue + "g each";
+                infoText.text = entry.fishData.fishName + " x" + entry.quantity + "\n" + entry.fishData.goldValue + "g each";
 
             // Set icon if available
             Transform iconTransform = slot.transform.Find("Icon");
