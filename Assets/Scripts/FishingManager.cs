@@ -17,6 +17,11 @@ public class FishingManager : MonoBehaviour
     private State currentState = State.Idle;
     private float timer;
 
+    [Header("Upgrade Bonuses")]
+    public float reelSpeedBonus = 0f;
+    public float catchBonus = 0f;
+    public float rarityBonus = 0f;
+
     void Start()
     {
         inventory = FindFirstObjectByType<PlayerInventory>();
@@ -53,14 +58,14 @@ public class FishingManager : MonoBehaviour
         pos.y = 0.1f;
         bobber.transform.position = pos;
         bobber.SetActive(true);
-        timer = Random.Range(minWait, maxWait);
+        timer = Mathf.Max(1f, Random.Range(minWait, maxWait) - reelSpeedBonus);
         hud.SetStatus("Waiting for a bite...");
     }
 
     void Bite()
     {
         currentState = State.Biting;
-        timer = biteWindow;
+        timer = biteWindow + catchBonus;
 
         // If player has caught 5 fish, the next catch is the horn!
         if (inventory.ShouldCatchHorn())

@@ -31,24 +31,14 @@ public class WhaleTrader : MonoBehaviour
 
     void Update()
     {
+        // Just handle auto-close when walking too far
         if (!whaleSummoner.IsWhalePresent()) return;
-
         float dist = Vector3.Distance(player.position, transform.position);
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("E pressed! Distance to whale: " + dist + " | Whale present: " + whaleSummoner.IsWhalePresent());
-        }
-
-        if (!isOpen && dist <= interactionDistance && Input.GetKeyDown(KeyCode.E))
-            OpenTrade();
-
         if (isOpen && dist > interactionDistance + 2f)
             CloseTrade();
     }
 
-
-    void OpenTrade()
+    public void OpenTrade()
     {
         isOpen = true;
         tradePanel.SetActive(true);
