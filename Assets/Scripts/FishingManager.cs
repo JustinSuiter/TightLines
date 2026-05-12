@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class FishingManager : MonoBehaviour
 {
+    public WaveOcean ocean;
     public GameObject bobber;
     public float castDistance = 8f;
     public float minWait = 3f;
     public float maxWait = 10f;
     public float biteWindow = 1.5f;
     public FishData[] fishTypes;
+    public ReelingMinigame reelingMinigame;
 
     private PlayerInventory inventory;
     private HUDManager hud;
@@ -24,6 +26,8 @@ public class FishingManager : MonoBehaviour
 
     void Start()
     {
+        reelingMinigame.onCatchSuccess = OnMinigameSuccess;
+        reelingMinigame.onCatchFail = OnMinigameFail;
         inventory = FindFirstObjectByType<PlayerInventory>();
         hud = FindFirstObjectByType<HUDManager>();
         hud.SetStatus("Press F to cast!");
@@ -31,6 +35,10 @@ public class FishingManager : MonoBehaviour
 
     void Update()
     {
+        // Block all input while minigame is active
+        if (reelingMinigame != null && reelingMinigame.IsActive)
+            return;
+
         if (currentState == State.Idle)
         {
             if (Input.GetKeyDown(KeyCode.F))
@@ -65,18 +73,21 @@ public class FishingManager : MonoBehaviour
     void Bite()
     {
         currentState = State.Biting;
-        timer = biteWindow + catchBonus;
 
-        // If player has caught 5 fish, the next catch is the horn!
         if (inventory.ShouldCatchHorn())
         {
-            currentFish = null; // Special signal that this is the horn
+            currentFish = null;
+            // Horn doesn't use minigame — instant catch on click
+            timer = biteWindow;
             hud.SetStatus("Something HUGE is biting! CLICK!");
         }
         else
         {
             currentFish = PickRandomFish();
-            hud.SetStatus("Something's biting! CLICK!");
+            // Start the minigame instead of waiting for click
+            reelingMinigame.StartMinigame(currentFish);
+            currentState = State.Idle; // Minigame takes over now
+            hud.SetStatus("Reel it in!");
         }
     }
 
@@ -127,5 +138,29 @@ public class FishingManager : MonoBehaviour
         }
 
         return fishTypes[0];
+    }
+
+        void OnMinigameSuccess()
+    {
+        bobber.SetActive(false);
+        inventory.AddFish(currentFish);
+        hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
+    }
+
+    void OnMinigameFail()
+    {
+        bobber.SetActive(false);
+        hud.SetStatus("The fish got away... Press F to try again.");
+    }
+
+        void LateUpdate()
+    {
+        // Make the bobber float on the waves while it's cast
+        if (bobber.activeInHierarchy && ocean != null)
+        {
+            Vector3 pos = bobber.transform.position;
+            float waveY = ocean.GetWaveHeight(pos.x, pos.z, Time.time);
+            bobber.transform.position = new Vector3(pos.x, waveY + 0.05f, pos.z);
+        }
     }
 }
