@@ -15,5 +15,5 @@ MonoBehaviour:
   fishName: Tuna
   goldValue: 35
   spawnChance: 0.1
-  catchDifficulty: 0.85
+  catchDifficulty: 0.6
   fishImage: {fileID: 0}

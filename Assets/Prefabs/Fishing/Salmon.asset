@@ -15,5 +15,5 @@ MonoBehaviour:
   fishName: Salmon
   goldValue: 15
   spawnChance: 0.3
-  catchDifficulty: 0.5
+  catchDifficulty: 0.4
   fishImage: {fileID: 21300000, guid: 32446f1e863d14c4ea21e741bc34a92d, type: 3}

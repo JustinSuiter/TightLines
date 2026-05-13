@@ -76,6 +76,7 @@ public class UpgradeShop : MonoBehaviour
             rodLevel++;
             fishingManager.reelSpeedBonus += 1.5f; // Reduces wait time
             RefreshShop();
+            CheckForEnding();
         }
     }
 
@@ -88,6 +89,7 @@ public class UpgradeShop : MonoBehaviour
             reelLevel++;
             fishingManager.catchBonus += 0.4f; // Bigger bite window
             RefreshShop();
+            CheckForEnding();
         }
     }
 
@@ -101,6 +103,7 @@ public class UpgradeShop : MonoBehaviour
             // Bait level affects fish rarity — we'll wire this into FishingManager
             fishingManager.rarityBonus += 0.1f;
             RefreshShop();
+            CheckForEnding();
         }
     }
 
@@ -118,8 +121,21 @@ public class UpgradeShop : MonoBehaviour
         string reelCost = reelLevel >= maxLevel ? "MAX" : GetCost(reelBaseCost, reelLevel) + "g";
         string baitCost = baitLevel >= maxLevel ? "MAX" : GetCost(baitBaseCost, baitLevel) + "g";
 
-        rodInfoText.text = $"🎣 Rod    Lv {rodLevel}/{maxLevel}    {rodCost}";
-        reelInfoText.text = $"🌀 Reel   Lv {reelLevel}/{maxLevel}    {reelCost}";
-        baitInfoText.text = $"🪱 Bait   Lv {baitLevel}/{maxLevel}    {baitCost}";
+        rodInfoText.text = $"Rod    Lv {rodLevel}/{maxLevel}    {rodCost}";
+        reelInfoText.text = $"Reel   Lv {reelLevel}/{maxLevel}    {reelCost}";
+        baitInfoText.text = $"Bait   Lv {baitLevel}/{maxLevel}    {baitCost}";
+    }
+
+        void CheckForEnding()
+    {
+        if (rodLevel >= maxLevel && reelLevel >= maxLevel && baitLevel >= maxLevel)
+        {
+            EndingManager ending = FindFirstObjectByType<EndingManager>();
+            if (ending != null)
+            {
+                CloseShop(); // Close shop first
+                ending.TriggerEnding();
+            }
+        }
     }
 }
