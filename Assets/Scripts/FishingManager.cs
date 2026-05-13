@@ -135,15 +135,22 @@ public class FishingManager : MonoBehaviour
 
     FishData PickRandomFish()
     {
+        // Boost spawn chances based on bait level
+        // Rare fish (low spawn chance) get a bigger relative boost
         float total = 0f;
-        foreach (FishData f in fishTypes) total += f.spawnChance;
+        foreach (FishData f in fishTypes)
+        {
+            float effective = f.spawnChance + (1f - f.spawnChance) * rarityBonus;
+            total += effective;
+        }
 
         float roll = Random.Range(0f, total);
         float cumulative = 0f;
 
         foreach (FishData f in fishTypes)
         {
-            cumulative += f.spawnChance;
+            float effective = f.spawnChance + (1f - f.spawnChance) * rarityBonus;
+            cumulative += effective;
             if (roll <= cumulative) return f;
         }
 

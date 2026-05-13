@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02ef6faa3fba4f4a94d8e640022c7b8, type: 3}
+  m_Name: Megalodon
+  m_EditorClassIdentifier: Assembly-CSharp::FishData
+  fishName: Megalodon
+  goldValue: 250
+  spawnChance: 0.005
+  catchDifficulty: 1
+  fishImage: {fileID: 21300000, guid: 7a27ef69ea2f48c4083e6ecd95a8c94a, type: 3}

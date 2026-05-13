@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a02ef6faa3fba4f4a94d8e640022c7b8, type: 3}
-  m_Name: Tuna
+  m_Name: Cod
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  fishName: Tuna
-  goldValue: 35
-  spawnChance: 0.1
-  catchDifficulty: 0.6
-  fishImage: {fileID: 0}
+  fishName: Cod
+  goldValue: 12
+  spawnChance: 0.35
+  catchDifficulty: 0.4
+  fishImage: {fileID: 21300000, guid: b57b24714bd491e4fafea97a47f64304, type: 3}

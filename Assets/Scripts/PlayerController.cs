@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // If any menu is open (cursor unlocked), skip look input
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         transform.Rotate(0f, mouseX, 0f);
 
@@ -29,6 +32,13 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Same check for movement (optional — comment out if you want player to still walk)
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+            return;
+        }
+
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 dir = (transform.right * h + transform.forward * v).normalized * moveSpeed;
