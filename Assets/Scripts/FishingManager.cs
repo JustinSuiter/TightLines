@@ -10,6 +10,7 @@ public class FishingManager : MonoBehaviour
     public float biteWindow = 1.5f;
     public FishData[] fishTypes;
     public ReelingMinigame reelingMinigame;
+    public RodManager rodManager;
 
     private PlayerInventory inventory;
     private HUDManager hud;
@@ -61,11 +62,20 @@ public class FishingManager : MonoBehaviour
     void Cast()
     {
         currentState = State.Casting;
+        hud.SetStatus("Casting...");
+
+        // Play the cast animation, spawn bobber when it "releases"
+        rodManager.PlayCastAnimation(SpawnBobber);
+    }
+
+    void SpawnBobber()
+    {
         Camera cam = Camera.main;
         Vector3 pos = cam.transform.position + cam.transform.forward * castDistance;
-        pos.y = 0.1f;
         bobber.transform.position = pos;
         bobber.SetActive(true);
+        AudioManager.Instance.PlaySplash();
+
         timer = Mathf.Max(1f, Random.Range(minWait, maxWait) - reelSpeedBonus);
         hud.SetStatus("Waiting for a bite...");
     }
@@ -142,6 +152,7 @@ public class FishingManager : MonoBehaviour
 
         void OnMinigameSuccess()
     {
+        AudioManager.Instance.PlayCatchSuccess();
         bobber.SetActive(false);
         inventory.AddFish(currentFish);
         hud.SetStatus("You caught a " + currentFish.fishName + "! Press F to cast again.");
@@ -149,6 +160,7 @@ public class FishingManager : MonoBehaviour
 
     void OnMinigameFail()
     {
+        AudioManager.Instance.PlayFishEscape();
         bobber.SetActive(false);
         hud.SetStatus("The fish got away... Press F to try again.");
     }

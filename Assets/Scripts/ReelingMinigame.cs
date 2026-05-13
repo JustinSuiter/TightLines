@@ -10,6 +10,9 @@ public class ReelingMinigame : MonoBehaviour
     public RectTransform catchZone;
     public Image progressBar;
 
+    [Header("Audio")]
+    public AudioSource reelAudioSource;
+
     [Header("Difficulty")]
     public float indicatorSpeed = 200f;
     public float pullForce = 400f;
@@ -64,6 +67,12 @@ public class ReelingMinigame : MonoBehaviour
         patience = Mathf.Lerp(maxTimeOutOfZone, maxTimeOutOfZone * 0.75f, difficulty);
 
         catchZoneTargetPos = Random.Range(-0.7f, 0.7f);
+
+        if (reelAudioSource != null && AudioManager.Instance != null)
+        {
+            reelAudioSource.clip = AudioManager.Instance.reelSound;
+            reelAudioSource.loop = true;
+        }
     }
 
     void Update()
@@ -79,9 +88,17 @@ public class ReelingMinigame : MonoBehaviour
     void UpdateIndicator()
     {
         if (Input.GetMouseButton(0))
+        {
             indicatorVelocity += pullForce * Time.deltaTime;
+            if (reelAudioSource != null && !reelAudioSource.isPlaying)
+                reelAudioSource.Play();
+        }
         else
+        {
             indicatorVelocity -= gravityForce * Time.deltaTime;
+            if (reelAudioSource != null && reelAudioSource.isPlaying)
+                reelAudioSource.Stop();
+        }
 
         indicatorPos += indicatorVelocity * Time.deltaTime * 0.008f;
         indicatorPos = Mathf.Clamp(indicatorPos, -1f, 1f);
@@ -131,6 +148,7 @@ public class ReelingMinigame : MonoBehaviour
 
     void EndMinigame(bool success)
     {
+        if (reelAudioSource != null) reelAudioSource.Stop();
         isActive = false;
         panel.SetActive(false);
 
